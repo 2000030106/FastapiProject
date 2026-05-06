@@ -1,17 +1,26 @@
-import os
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
-SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"]
 #"postgresql://postgresql+psycopg2//postgres:S%40isrujan123@localhost:5433/TodoApplicationDatabase"
-engine = create_engine(SQLALCHEMY_DATABASE_URL,pool_pre_ping=True)
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+DATABASE_URL = os.getenv("DATABASE_URL")  # ✅ safe way
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL is not set")
+
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 Base = declarative_base()
-
 # {
 #   "username": "satyasai",
 #   "email": "sai@gmail.com",
