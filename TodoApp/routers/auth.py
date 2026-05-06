@@ -9,6 +9,7 @@ from TodoApp.models import Users
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
+from sqlalchemy.exc import IntegrityError
 
 router = APIRouter(
     prefix='/auth',
@@ -81,24 +82,40 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency,
                       create_user_request: CreateUserRequest):
-    create_user_model = Users(
-        email=create_user_request.email,
-        username=create_user_request.username,
-        first_name=create_user_request.first_name,
-        last_name=create_user_request.last_name,
-        role=create_user_request.role,
-        hashed_password=bcrypt_context.hash(create_user_request.password),
-        is_active=True
-    )
 
-    db.add(create_user_model)
-    db.commit()
-    db.refresh(create_user_model)
-    return {
-        "message": "User created successfully",
-        "user_id": create_user_model.id
-    }
+    try:
+        create_user_model = Users(
+            email=create_user_request.email,
+            username=create_user_request.username,
+            first_name=create_user_request.first_name,
+            last_name=create_user_request.last_name,
+            role=create_user_request.role,
+            hashed_password=bcrypt_context.hash(create_user_request.password),
+            is_active=True
+        )
 
+        db.add(create_user_model)
+        db.commit()
+        db.refresh(create_user_model)
+
+        return {
+            "message": "User created successfully",
+            "user_id": create_user_model.id
+        }
+
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="Username or email already exists"
+        )
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
