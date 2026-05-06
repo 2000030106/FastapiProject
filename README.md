@@ -151,6 +151,9 @@ Response:
 | PUT    | /todo/{id} | Update todo       |
 | DELETE | /todo/{id} | Delete todo       |
 
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/d33b6d0a-d463-4baf-aaa3-d852a4e2b836" />
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/c699bcef-82a2-4f94-ba98-f73b5b759251" />
+
 ---
 
 ## 👑 Admin APIs
@@ -160,6 +163,7 @@ Response:
 | GET    | /admin/todo      | Get all todos   |
 | DELETE | /admin/todo/{id} | Delete any todo |
  
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/81a59755-773a-44b0-bd16-cc44eae7d6ff" />
 
 ---
 
@@ -171,6 +175,9 @@ Response:
 
 
 ---
+
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/43016f4e-2f06-4774-897b-2e1911a9f246" />
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/a2f561ba-7958-4a54-90e3-47120e935c32" />
 
 ## 🔒 Security
 
